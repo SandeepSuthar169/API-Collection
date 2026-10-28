@@ -7,7 +7,6 @@ const logDir = path.join(process.cwd(), "logs");
 
 const { combine, timestamp, errors, json, colorize, printf } = winston.format;
 
-// Human-readable format for development
 const devFormat = combine(
   colorize(),
   timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
@@ -20,12 +19,10 @@ const devFormat = combine(
   })
 );
 
-// Structured JSON format for production (easy to ship to Datadog, ELK, CloudWatch, etc.)
 const prodFormat = combine(timestamp(), errors({ stack: true }), json());
 
 const transports: winston.transport[] = [new winston.transports.Console()];
 
-// Only write files in production
 if (isProduction) {
   transports.push(
     new DailyRotateFile({

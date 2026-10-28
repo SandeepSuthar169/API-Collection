@@ -13,7 +13,7 @@ const app = express()
 const PORT = process.env.PORT || 3000;
 
 app.use(cors({
-    origin : "http://localhost:3000",
+    origin : process.env.ORIGIN,
     credentials: true
 }))
 
@@ -21,11 +21,17 @@ app.use(express.json())
 
 app.use(cookieParser())
 
+app.use(
+  morgan(":method :url :status :res[content-length] - :response-time ms", {
+    stream: { write: (message) => logger.http(message.trim()) },
+  })
+);
+
 app.get("/api/healthCheck", (_req: Request, res: Response) => {
     try {
         res.status(200).json({
         status: "ok",
-        message: "Every thing is Okey!",
+        message: "Every thing is okey!",
         database : "Connected"
     })  
     } catch (error) {
@@ -34,17 +40,8 @@ app.get("/api/healthCheck", (_req: Request, res: Response) => {
             status: "error",
             database: "disconnected"
         })
-        
     }
 })
-
-
-
-app.use(
-  morgan(":method :url :status :res[content-length] - :response-time ms", {
-    stream: { write: (message) => logger.http(message.trim()) },
-  })
-);
 
 async function startServer() {
     try {
@@ -60,7 +57,6 @@ async function startServer() {
     }
 }
 
-startServer()
 
-
+startServer();
 
