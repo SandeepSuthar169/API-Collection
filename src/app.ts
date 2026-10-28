@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser";
 import pool, { checkDatabaseConnection } from "./db/pool";
 import express, { type Request, type Response } from "express";
 import morgan from "morgan";
-import logger from "../src/utiles/logger";
+import logger from "@/utiles/logger";
 
 
 const app = express()

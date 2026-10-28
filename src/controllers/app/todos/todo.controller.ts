@@ -1,9 +1,9 @@
-import pool from "../../../db/pool";
-import logger from "../../../utiles/logger";
+import pool from "@/db/pool";
+import logger from "@/utiles/logger";
 import type { Request, Response } from "express";
-import { AppError } from "../../../utiles/error.utiles";
-import { asyncHandler } from "../../../middlewares/asyncHandler.middleware";
-import { getTodosQuerySchema, todoParamsSchema, type Todo } from "../../../types";
+import { AppError } from "@/utiles/error.utiles";
+import { asyncHandler } from "@/middlewares/asyncHandler.middleware";
+import { getTodosQuerySchema, todoParamsSchema, type Todo } from "@/types";
 
 export const getAllTodos = asyncHandler(
   async (req: Request, res: Response) => {

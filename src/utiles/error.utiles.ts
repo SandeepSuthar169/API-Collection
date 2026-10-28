@@ -5,7 +5,7 @@ import express, {
   type NextFunction,
 } from "express";
 
-export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
+export const errorHandler: ErrorRequestHandler = (err, _req, res, next) => {
   const statusCode = err instanceof AppError ? err.statusCode : 500;
 
   res.status(statusCode).json({
