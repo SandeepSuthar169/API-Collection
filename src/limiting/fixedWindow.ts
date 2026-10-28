@@ -14,7 +14,7 @@ interface WindowEntry {
   resetTime: number; // timestamp when this window ends
 }
 
-export const rateLimiter = ({
+export const FWrateLimiter = ({
   windowMs,
   max,
   message = "Too many requests, please try again later",

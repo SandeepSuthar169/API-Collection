@@ -7,7 +7,8 @@ import cookieParser from "cookie-parser";
 import pool, { checkDatabaseConnection } from "./db/pool";
 import express, { type Request, type Response } from "express";
 import todoRoutes from "@/routes/app/todos/todos.route"
-import { rateLimiter } from "./limiting/fixedWindow";
+import { FWrateLimiter } from "./limiting/fixedWindow";
+import { SLrateLimiter } from "./limiting/SlidingWindow"; 
 
 const app = express()
 
@@ -28,7 +29,13 @@ app.use(
   })
 );
 
-export const FXlimiter = rateLimiter({
+export const FXlimiter = FWrateLimiter({
+    windowMs: 15 * 60 * 1000,
+    max: 5,
+    message: "Too many attempts, try again in 15 minutes"
+})
+
+export const SLlimiter = SLrateLimiter({
     windowMs: 15 * 60 * 1000,
     max: 5,
     message: "Too many attempts, try again in 15 minutes"
