@@ -1,12 +1,12 @@
 import "dotenv/config";
 import cors from "cors";
+import morgan from "morgan";
+import logger from "@/utiles/logger";
 import session from "express-session";
 import cookieParser from "cookie-parser";
 import pool, { checkDatabaseConnection } from "./db/pool";
 import express, { type Request, type Response } from "express";
-import morgan from "morgan";
-import logger from "@/utiles/logger";
-
+import todoRoutes from "@/routes/app/todos/todos.route"
 
 const app = express()
 
@@ -26,6 +26,8 @@ app.use(
     stream: { write: (message) => logger.http(message.trim()) },
   })
 );
+
+app.use("/api/v1/todos", todoRoutes)
 
 app.get("/api/healthCheck", (_req: Request, res: Response) => {
     try {

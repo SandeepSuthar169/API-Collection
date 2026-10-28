@@ -7,4 +7,8 @@ import {
 const route = express()
 
 
-route.get("/")
+route.get("/", getAllTodos)              // E.g. : http://localhost:PORT/api/v1/todos?page=1&limit=20
+route.get("/:id", getTodoById)           // E.g. : http://localhost:PORT/api/v1/todos/e5049973-a748-49d8-8160-a0b91d7ac3a8
+
+
+export default route

@@ -1,11 +1,11 @@
 import z from "zod";
 
 export interface Todo {
-  id: number;
+  id: string;
   title: string;
   description: string | null;
   completed: boolean;
-  created_at: Date;
+  createdAt: Date;
 }
 // For Todo Schema get ALL Todos
 export const getTodosQuerySchema = z.object({
@@ -15,6 +15,14 @@ export const getTodosQuerySchema = z.object({
 
 // For Todo Id Schema get Todo by Id 
 export const todoParamsSchema = z.object({
-    id: z.coerce.number().int().positive().max(2_147_483_647)
+  id: z.string().uuid("Invalid todo id"),
+});
+
+// For Todo Schema Crete Todo Body
+export const createTodoBodySchema = z.object({
+  title: z.string().trim().min(1, "Title is required").max(255, "Title must be at most 255 characters"),
+  description: z.string().trim().min(1).nullish(),
+  isComplete: z.boolean().default(false),
 })
 
+export type CreteTodoInput = z.infer<typeof createTodoBodySchema>

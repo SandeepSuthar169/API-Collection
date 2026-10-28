@@ -23,7 +23,8 @@
     "typescript": "^7"
   },
   "scripts": {
-  "dev": "ts-node-dev -r tsconfig-paths/register src/server.ts"
+  "dev": "bun --watch src/app.ts",
+  "start": "bun src/app.ts"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
