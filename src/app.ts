@@ -1,7 +1,7 @@
 import "dotenv/config";
 import cors from "cors";
 import morgan from "morgan";
-import logger from "@/utiles/logger";
+import logger from "@/logger/winston.logger";
 import session from "express-session";
 import cookieParser from "cookie-parser";
 import pool, { checkDatabaseConnection } from "./db/pool";

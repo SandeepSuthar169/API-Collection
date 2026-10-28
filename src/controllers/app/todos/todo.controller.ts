@@ -1,9 +1,9 @@
 import pool from "@/db/pool";
-import logger from "@/utiles/logger";
+import logger from "@/logger/winston.logger";
 import type { Request, Response } from "express";
 import { AppError } from "@/utiles/error.utiles";
 import { asyncHandler } from "@/middlewares/asyncHandler.middleware";
-import { createTodoBodySchema, getTodosQuerySchema, todoParamsSchema, type Todo } from "@/types";
+import { createTodoBodySchema, getTodosQuerySchema, todoParamsSchema, updateTodoBodySchema, type Todo } from "@/validation";
 
 export const getAllTodos = asyncHandler(async (req: Request, res: Response) => {
   try {
@@ -92,7 +92,7 @@ export const getTodoById = asyncHandler (async (req: Request, res: Response)=> {
   }
 })
 
-export const CreateTodo = asyncHandler (async (req: Request, res: Response) => {
+export const createTodo = asyncHandler (async (req: Request, res: Response) => {
   try {
     const parsed = createTodoBodySchema.safeParse(req.body);
 
@@ -126,4 +126,68 @@ export const CreateTodo = asyncHandler (async (req: Request, res: Response) => {
     console.error(error);
     throw new AppError("Internal server Error", 500)
   }
+})
+
+export const upaateTodo = asyncHandler (async (req: Request, res: Response) => {
+  try {
+  
+    const parsedId = todoParamsSchema.safeParse(req.params);
+    const parsedBody = updateTodoBodySchema.safeParse(req.body);
+
+    if (!parsedId.success) throw new AppError(parsedId.error.issues[0]?.message ?? "Invalid Todo Id", 400);
+    if (!parsedBody.success) throw new AppError(parsedBody.error.issues[0]?.message ?? "Invalid request body", 400);
+
+    const { id } = parsedId.data;
+ 
+    const { title, description, isComplete } = parsedBody.data ?? {};
+
+    const existingTodo = await pool.query<Todo>(`
+      SELECT 
+          id,
+          title,
+          description,
+          "isCompleted"
+      FROM todos
+      WHERE id = $1
+      `, [id])
+      const currentTodo = existingTodo.rows[0]
+
+      if(!currentTodo) throw new AppError("Todo not Found", 400)
+
+
+      const updateTitle = title !== undefined ? title.trim() : currentTodo?.title;
+      if(!updateTitle || updateTitle.trim().length === 0) throw new AppError("Title cannot be empty", 400)
+
+      const upateDescription = description !== undefined ? description?.trim() : currentTodo?.description;
+
+      const updateIsCompletd = isComplete ?? currentTodo?.isComplete;
+
+      const UpdateResult = await pool.query<Todo>(`
+        UPDATE todos
+        SET 
+          title = $1,
+          description = $2,
+          "isCompleted = $3"
+        WHERE id = $4
+        RETURNING id, title, description, "isComplete"  
+
+        `, [
+          updateTitle,
+          upateDescription,
+          updateIsCompletd
+        ])
+
+      logger.info("Todo Updated", { todoId: UpdateResult.rows[0]?.id })
+
+      res.status(200).json({
+        success: true,
+        message: "Todo update successfully",
+        data: UpdateResult.rows[0]
+      })
+
+
+    } catch (error) {
+      console.error(error);
+      throw new AppError("Internal Server Error", 500)
+    }
 })
