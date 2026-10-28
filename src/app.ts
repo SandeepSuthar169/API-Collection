@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import pool, { checkDatabaseConnection } from "./db/pool";
 import express, { type Request, type Response } from "express";
 import todoRoutes from "@/routes/app/todos/todos.route"
+import { rateLimiter } from "./limiting/fixedWindow";
 
 const app = express()
 
@@ -26,6 +27,12 @@ app.use(
     stream: { write: (message) => logger.http(message.trim()) },
   })
 );
+
+export const FXlimiter = rateLimiter({
+    windowMs: 15 * 60 * 1000,
+    max: 5,
+    message: "Too many attempts, try again in 15 minutes"
+})
 
 app.use("/api/v1/todos", todoRoutes)
 
