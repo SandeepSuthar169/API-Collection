@@ -3,7 +3,7 @@ import logger from "@/logger/winston.logger";
 import type { Request, Response } from "express";
 import { AppError } from "@/utiles/error.utiles";
 import { asyncHandler } from "@/middlewares/asyncHandler.middleware";
-import { createTodoBodySchema, getTodosQuerySchema, todoParamsSchema, toggleTodoBodySchema, updateTodoBodySchema, type Todo } from "@/validation/app/todos";
+import { createTodoBodySchema, getTodosQuerySchema, todoParamsSchema, toggleTodoBodySchema, updateTodoBodySchema, type Todo } from "@/validation/app/todos/todos.validation";
 
 export const getAllTodos = asyncHandler(async (req: Request, res: Response) => {
   try {
@@ -53,7 +53,7 @@ export const getAllTodos = asyncHandler(async (req: Request, res: Response) => {
       console.error(error);
       throw new AppError("Internal Server Error", 500)
     }
-    }
+  }
 );
 
 export const getTodoById = asyncHandler (async (req: Request, res: Response)=> {
@@ -139,7 +139,7 @@ export const createTodo = asyncHandler (async (req: Request, res: Response) => {
 })
 
 export const updateTodo = asyncHandler (async (req: Request, res: Response) => {
-  // try {
+  try {
   
     const parsedId = todoParamsSchema.safeParse(req.params);
     const parsedBody = updateTodoBodySchema.safeParse(req.body);
@@ -199,10 +199,10 @@ export const updateTodo = asyncHandler (async (req: Request, res: Response) => {
       })
 
 
-    // } catch (error) {
-    //   console.error(error);
-    //   throw new AppError("Internal Server Error", 500)
-    // }
+    } catch (error) {
+      console.error(error);
+      throw new AppError("Internal Server Error", 500)
+    }
 })
 
 export const deleteTodo = asyncHandler (async (req: Request, res: Response) => {

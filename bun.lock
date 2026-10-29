@@ -5,6 +5,7 @@
     "": {
       "name": "api-collection",
       "dependencies": {
+        "@types/nodemon": "^3.1.1",
         "bcrypt": "^6.0.0",
         "cloudinary": "^2.11.0",
         "connect-redis": "^10.0.0",
@@ -17,7 +18,7 @@
         "helmet": "^8.3.0",
         "jsonwebtoken": "^9.0.3",
         "morgan": "^1.12.1",
-        "multer": "^2.4.0",
+        "multer": "^2.5.0",
         "nodemon": "^3.1.14",
         "pg": "^8.23.1",
         "redis": "^6.3.0",
@@ -96,6 +97,8 @@
     "@types/multer": ["@types/multer@2.3.0", "", { "dependencies": { "@types/express": "*" } }, "sha512-i7STIm9V4K2MPH4ZYMtrZAwNxs3kglk2LgleaTuB9pUXgADBcQYQuYMd7+6xgTIxfoggIkFA/DkkvycdZpIARA=="],
 
     "@types/node": ["@types/node@26.6.5", "", { "dependencies": { "undici-types": "~8.9.0" } }, "sha512-uMzsv9stDdofIZBx4UGh4Z9ZgXnGC9seRDscilBcTHAeOFk67MZg/k9bWVfO+bk4qZmG+l52hRnLwUiH2LnJTg=="],
+
+    "@types/nodemon": ["@types/nodemon@3.1.1", "", { "dependencies": { "nodemon": "*" } }, "sha512-q29nOOLwcTTPzp6VABHTybbLYdPF5aW6FZARvax8JGhYdQvLtZXX3z2MPP1KkaBDxVsNp7ehl2OSuTbIpsTihg=="],
 
     "@types/pg": ["@types/pg@8.23.1", "", { "dependencies": { "@types/node": "*", "pg-protocol": "*", "pg-types": "^2.2.0" } }, "sha512-fKVHpikPdg4GKks3JuLEhvwSyvwzF23hnabPy6DD8ljVbC7+6J5dQzdv4arV6jqq57djnMgs1HKBxX4P8aBI3A=="],
 

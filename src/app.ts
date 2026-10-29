@@ -6,13 +6,11 @@ import session from "express-session";
 import cookieParser from "cookie-parser";
 import pool, { checkDatabaseConnection } from "./db/pool";
 import express, { type Request, type Response } from "express";
-import todoRoutes from "@/routes/app/todos/todos.route"
-import { FWrateLimiter } from "./limiter/fixedWindow";
-import { SLrateLimiter } from "./limiter/SlidingWindow"; 
+import todoRoutes from "@/routes/app/todos/todos.route" 
 
 const app = express()
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 app.use(cors({
     origin : process.env.ORIGIN,
@@ -28,9 +26,6 @@ app.use(
     stream: { write: (message) => logger.http(message.trim()) },
   })
 );
-
-
-
 
 app.use("/api/v1/todos", todoRoutes)
 
