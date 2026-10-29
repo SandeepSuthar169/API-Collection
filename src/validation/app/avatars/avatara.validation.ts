@@ -1,5 +1,14 @@
 import { z } from "zod";
 
+export interface Avatar {
+    id: number;
+    image: string;
+    image_name: string
+    categories: string;
+    createdAt: Date;
+};
+
+
 export const avatarCategories = [
   "Clay",
   "Criters",

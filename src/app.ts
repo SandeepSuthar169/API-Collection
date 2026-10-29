@@ -6,7 +6,8 @@ import session from "express-session";
 import cookieParser from "cookie-parser";
 import pool, { checkDatabaseConnection } from "./db/pool";
 import express, { type Request, type Response } from "express";
-import todoRoutes from "@/routes/app/todos/todos.route" 
+import todoRoutes from "@/routes/app/todos/todos.route"
+import avatarRoutes from "@/routes/app/avatar/avatar.route"
 
 const app = express()
 
@@ -26,8 +27,11 @@ app.use(
     stream: { write: (message) => logger.http(message.trim()) },
   })
 );
+app.use(express.json({ limit: "5mb" })); 
+app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/v1/todos", todoRoutes)
+app.use("/api/v1/avatars", avatarRoutes)
 
 app.get("/api/healthCheck", (_req: Request, res: Response) => {
     try {
