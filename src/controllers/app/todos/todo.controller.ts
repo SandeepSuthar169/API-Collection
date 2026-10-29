@@ -93,7 +93,7 @@ export const getTodoById = asyncHandler (async (req: Request, res: Response)=> {
 })
 
 export const createTodo = asyncHandler (async (req: Request, res: Response) => {
-  try {
+  // try {
     const parsed = createTodoBodySchema.safeParse(req.body);
 
     if (!parsed.success) throw new AppError(parsed.error.issues[0]?.message ?? "Invalid request body", 400);
@@ -122,10 +122,10 @@ export const createTodo = asyncHandler (async (req: Request, res: Response) => {
         data: result.rows[0]
       })
 
-  } catch (error) {
-    console.error(error);
-    throw new AppError("Internal server Error", 500)
-  }
+  // } catch (error) {
+  //   console.error(error);
+  //   throw new AppError("Internal server Error", 500)
+  // }
 })
 
 export const upaateTodo = asyncHandler (async (req: Request, res: Response) => {
@@ -226,11 +226,24 @@ export const toggleTodo = asyncHandler (async (req: Request, res: Response) => {
     if(!parsedBody.success) throw new AppError("Invalid request body", 400);
 
     const { id } = paraedId.data;
+    const { isComplete } = parsedBody.data ?? {};
 
+    const result = await pool.query<Pick<Todo, "id" | "title" | "description" | "isComplete">>(
+        `UPDATE todos
+        SET "isCompleted" = COALESCE($1::boolean, NOT "isCompleted")
+        WHERE id = $2
+        RETURNING id, title, description, "isCompleted"`,
+        [isComplete, id]
+      );
+
+    if (!result) throw new AppError("Todo not found", 404);
+
+    logger.info("Todo updated", { todoId: result.rows[0]?.id });
     
-
-
-
+    res.status(200).json({
+      success: true,
+      data: result.rows[0]
+    })
 
   } catch (error) {
     console.error(error);

@@ -29,17 +29,8 @@ app.use(
   })
 );
 
-export const FXlimiter = FWrateLimiter({
-    windowMs: 15 * 60 * 1000,
-    max: 5,
-    message: "Too many attempts, try again in 15 minutes"
-})
 
-export const SLlimiter = SLrateLimiter({
-    windowMs: 15 * 60 * 1000,
-    max: 5,
-    message: "Too many attempts, try again in 15 minutes"
-})
+
 
 app.use("/api/v1/todos", todoRoutes)
 
