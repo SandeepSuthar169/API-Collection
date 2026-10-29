@@ -3,7 +3,7 @@ import logger from "@/logger/winston.logger";
 import type { Request, Response } from "express";
 import { AppError } from "@/utiles/error.utiles";
 import { asyncHandler } from "@/middlewares/asyncHandler.middleware";
-import { createTodoBodySchema, getTodosQuerySchema, todoParamsSchema, updateTodoBodySchema, type Todo } from "@/validation";
+import { createTodoBodySchema, getTodosQuerySchema, todoParamsSchema, toggleTodoBodySchema, updateTodoBodySchema, type Todo } from "@/validation/app/todos";
 
 export const getAllTodos = asyncHandler(async (req: Request, res: Response) => {
   try {
@@ -62,7 +62,7 @@ export const getTodoById = asyncHandler (async (req: Request, res: Response)=> {
 
     if(!parsed.success) throw new AppError("Invalid todo Id", 400)
 
-    const  {id}  = parsed.data
+    const { id }  = parsed.data
   
     const result = await pool.query<Todo>(
         `SELECT 
@@ -190,4 +190,50 @@ export const upaateTodo = asyncHandler (async (req: Request, res: Response) => {
       console.error(error);
       throw new AppError("Internal Server Error", 500)
     }
+})
+
+export const deleteTodo = asyncHandler (async (req: Request, res: Response) => {
+  try {
+    const paraed = todoParamsSchema.safeParse(req.params)
+
+    if(!paraed.success) throw new AppError("Invalid todo Id", 400)
+
+    const { id } = paraed.data;
+
+    const result = await pool.query<Todo>(`
+      DELETE FROM todos
+      WHERE id = $1
+      `, [id])
+
+    if(!result || result.rows.length === 0) throw new AppError("Todo not found!", 400);
+
+    res.status(200).json({
+      message: "Todo deleted successfully",
+      success: true,
+    })
+  } catch (error) {
+    console.error(error);
+    throw new AppError("Internal Server Error", 500)
+  }
+})
+
+export const toggleTodo = asyncHandler (async (req: Request, res: Response) => {
+  try {
+    const paraedId = todoParamsSchema.safeParse(req.params)
+    const parsedBody = toggleTodoBodySchema.safeParse(req.body)
+
+    if(!paraedId.success) throw new AppError("Invalid Todo Id", 400);
+    if(!parsedBody.success) throw new AppError("Invalid request body", 400);
+
+    const { id } = paraedId.data;
+
+    
+
+
+
+
+  } catch (error) {
+    console.error(error);
+    throw new AppError("Internal Server Error", 500)
+  }
 })

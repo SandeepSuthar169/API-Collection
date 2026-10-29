@@ -15,6 +15,6 @@ router
 
 router
     .route("/:id")
-    .get(FXlimiter, getTodoById);         // e.g. http://localhost:PORT/api/v1/todos/e5049973-a748-49d8-8160-a0b91d7ac3a8
+    .get(FXlimiter, getTodoById)         // e.g. http://localhost:PORT/api/v1/todos/e5049973-a748-49d8-8160-a0b91d7ac3a8
 
 export default router;

@@ -7,8 +7,8 @@ import cookieParser from "cookie-parser";
 import pool, { checkDatabaseConnection } from "./db/pool";
 import express, { type Request, type Response } from "express";
 import todoRoutes from "@/routes/app/todos/todos.route"
-import { FWrateLimiter } from "./limiting/fixedWindow";
-import { SLrateLimiter } from "./limiting/SlidingWindow"; 
+import { FWrateLimiter } from "./limiter/fixedWindow";
+import { SLrateLimiter } from "./limiter/SlidingWindow"; 
 
 const app = express()
 

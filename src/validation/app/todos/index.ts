@@ -1,3 +1,4 @@
+import { exitOnError } from "winston";
 import z from "zod";
 
 export interface Todo {
@@ -40,3 +41,10 @@ export const updateTodoBodySchema = z
 });
 
 export type UpdateTodoInput = z.infer<typeof updateTodoBodySchema>
+
+
+export const toggleTodoBodySchema = z.object({
+    isComplete: z.boolean(),
+})
+
+export type toggleTodoInput = z.infer<typeof toggleTodoBodySchema> 
